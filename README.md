@@ -5,7 +5,7 @@
 
 
 <p align="center">
-  A simple voting API (expressjs) with simple front-end (reactjs)
+  A simple voting API (express) with simple front-end (reactjs)
 </p>
 
 ### Prerequisites
