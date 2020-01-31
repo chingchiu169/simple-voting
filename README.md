@@ -11,6 +11,11 @@
 ### Prerequisites
 * You'll need to have [git](https://git-scm.com/), [node](https://nodejs.org/en/) and [mongodb](https://www.mongodb.com/) installed in your system.
 
+### Demo
+```
+https://simple-voting.davidchiu.work/
+```
+
 ### To run
 * Clone the project:
 
