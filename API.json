@@ -1,0 +1,489 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "This is a document of simple voting API server.",
+    "version": "1.0.0",
+    "title": "Simple Voting",
+    "contact": {
+      "email": "chingchiu169@gmail.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    }
+  },
+  "host": "localhost:5000",
+  "basePath": "/api",
+  "tags": [
+    {
+      "name": "user",
+      "description": "Operations about user"
+    },
+    {
+      "name": "campaign",
+      "description": "Everything about campaign"
+    },
+    {
+      "name": "vote",
+      "description": "Everything about vote"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/user": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Get user token",
+        "description": "",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "HKID",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "hkid": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "failure operation",
+            "schema": {
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "message": {
+                  "$ref": "#/definitions/Message"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "properties": {
+                "error": {
+                  "$ref": "#/definitions/Error"
+                },
+                "user": {
+                  "$ref": "#/definitions/User"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Update user token",
+        "description": "",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "HKID",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "hkid": {
+                  "type": "string"
+                },
+                "token": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "failure operation",
+            "schema": {
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "message": {
+                  "$ref": "#/definitions/Message"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "properties": {
+                "error": {
+                  "$ref": "#/definitions/Error"
+                },
+                "user": {
+                  "$ref": "#/definitions/User"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": [
+          "user"
+        ],
+        "summary": "Check user token",
+        "description": "",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "HKID",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "failure operation",
+            "schema": {
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "message": {
+                  "$ref": "#/definitions/Message"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "properties": {
+                "error": {
+                  "$ref": "#/definitions/Error"
+                },
+                "message": {
+                  "$ref": "#/definitions/Message"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/campaign": {
+      "get": {
+        "tags": [
+          "campaign"
+        ],
+        "summary": "Get all campaigns",
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "properties": {
+                "error": {
+                  "$ref": "#/definitions/Error"
+                },
+                "campaigns": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Campaign"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "campaign"
+        ],
+        "summary": "Add a new campaign to the simple voting",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Campaign",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "campaign": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "title": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "start": {
+                        "type": "string"
+                      },
+                      "end": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "properties": {
+                "error": {
+                  "$ref": "#/definitions/Error"
+                },
+                "campaign": {
+                  "$ref": "#/definitions/Campaign"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/campaign/start": {
+      "get": {
+        "tags": [
+          "campaign"
+        ],
+        "summary": "Get started campaigns",
+        "description": "",
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "properties": {
+                "error": {
+                  "$ref": "#/definitions/Error"
+                },
+                "campaigns": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Campaign"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/campaign/end": {
+      "get": {
+        "tags": [
+          "campaign"
+        ],
+        "summary": "Get ended campaigns",
+        "description": "",
+        "responses": {
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "properties": {
+                "error": {
+                  "$ref": "#/definitions/Error"
+                },
+                "campaigns": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Campaign"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/vote": {
+      "put": {
+        "tags": [
+          "vote"
+        ],
+        "summary": "Update user token",
+        "description": "",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "Token",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation",
+            "schema": {
+              "properties": {
+                "error": {
+                  "$ref": "#/definitions/Error"
+                },
+                "votes": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Vote"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "vote"
+        ],
+        "summary": "Update user token",
+        "description": "",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "Token",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string"
+                },
+                "campaign": {
+                  "type": "string"
+                },
+                "for": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "failure operation",
+            "schema": {
+              "properties": {
+                "error": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "message": {
+                  "$ref": "#/definitions/Message"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "successful operation",
+            "schema": {
+              "properties": {
+                "error": {
+                  "$ref": "#/definitions/Error"
+                },
+                "campaign": {
+                  "$ref": "#/definitions/Campaign"
+                },
+                "vote": {
+                  "$ref": "#/definitions/Vote"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Error": {
+      "type": "boolean",
+      "default": false
+    },
+    "Message": {
+      "type": "string"
+    },
+    "User": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string"
+        }
+      }
+    },
+    "Campaign": {
+      "type": "object",
+      "properties": {
+        "_id": {
+          "type": "string"
+        },
+        "title": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "start": {
+          "type": "string",
+          "format": "date"
+        },
+        "end": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    },
+    "Vote": {
+      "type": "object",
+      "properties": {
+        "campaign": {
+          "type": "string"
+        },
+        "for": {
+          "type": "string"
+        },
+        "time": {
+          "type": "string",
+          "format": "date"
+        }
+      }
+    }
+  }
+}
