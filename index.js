@@ -21,8 +21,14 @@ app.use(bodyParser.json());
 if (process.env.NODE_ENV === 'production') {
 	app.use(express.static('client/build'));
 	const path = require('path');
-	app.get('*', (req, res) => {
-		res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+	app.get('*', (req, res, next) => {
+		console.log(req.originalUrl)
+		if (req.originalUrl.indexOf('/api') > -1) {
+			next();
+		}
+		else {
+			res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+		}
 	});
 }
 else {
@@ -33,11 +39,11 @@ else {
 	});
 }
 
+
 //IMPORT ROUTES
 require('./routes/userRoutes')(app);
 require('./routes/campaignRoutes')(app);
 require('./routes/voteRoutes')(app);
-
 
 
 const PORT = process.env.PORT || 5000;
