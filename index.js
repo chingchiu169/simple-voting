@@ -22,7 +22,6 @@ if (process.env.NODE_ENV === 'production') {
 	app.use(express.static('client/build'));
 	const path = require('path');
 	app.get('*', (req, res, next) => {
-		console.log(req.originalUrl)
 		if (req.originalUrl.indexOf('/api') > -1) {
 			next();
 		}
