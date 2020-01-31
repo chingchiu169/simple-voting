@@ -83,7 +83,7 @@ class User extends React.Component {
     window.localStorage.removeItem('user');
   }
   refreshToken = async () => {
-    if (this.state.hkid.trim() == "") {
+    if (this.state.hkid.trim() === "") {
       alert("Please input HKID who you want to refresh!");
       return;
     }

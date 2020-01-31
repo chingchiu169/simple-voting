@@ -9,7 +9,7 @@
     "dev": "concurrently --kill-others-on-fail \"npm run server\" \"npm run client\"",
     "start": "node index.js",
     "test": "mocha",
-    "setup": "npm install & (cd ./client && npm install)",
+    "setup": "npm install concurrently mocha nodemon --save-dev & npm install & (cd ./client & npm install)",
     "buildhtml": "cd ./client && npm run build"
   },
   "keywords": [],
