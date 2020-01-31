@@ -18,20 +18,11 @@ mongoose.connect(process.env.MONGODB_URI || `mongodb://localhost:27017/simplevot
 app.use(compression())
 app.use(bodyParser.json());
 
-if (process.env.NODE_ENV === 'production') {
-	app.use(express.static('client/build'));
-	const path = require('path');
-	app.get('*', (req, res) => {
-		res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'))
+app.get('/', (req, res) => {
+	return res.status(200).send({
+		error: false,
 	});
-}
-else {
-	app.get('/', (req, res) => {
-		return res.status(200).send({
-			error: false,
-		});
-	});
-}
+});
 
 //IMPORT ROUTES
 require('./routes/userRoutes')(app);
