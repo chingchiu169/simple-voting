@@ -14,10 +14,12 @@ import {
   ModalBody,
   Label,
   CardHeader,
+  CardFooter,
 } from "reactstrap";
 import userService from '../services/userService';
 import campaignService from '../services/campaignService';
 import voteService from "../services/voteService";
+import utils from "../utils/utils";
 
 Array.prototype.sum = function (prop) {
   var total = 0
@@ -103,6 +105,12 @@ class Campaign extends React.Component {
       case 4:
         campaigns.sort((a, b) => (new Date(a.end).getTime() < new Date(b.end).getTime()) ? 1 : ((new Date(b.end).getTime() < new Date(a.end).getTime()) ? -1 : 0));
         break;
+      case 5:
+        campaigns.sort((a) => (new Date(a.start).getTime() < new Date().getTime() && new Date(a.end).getTime() > new Date().getTime()) ? -1 : (new Date(a.end).getTime() < new Date().getTime()) ? 1 : 0);
+        break;
+      case 6:
+        campaigns.sort((a) => (new Date(a.end).getTime() > new Date().getTime()) ? 1 : ((new Date().getTime() > new Date(a.end).getTime()) ? -1 : 0));
+        break;
       default:
     }
     this.setState({ campaigns: campaigns });
@@ -128,10 +136,15 @@ class Campaign extends React.Component {
     }
     this.getCampaigns();
     this.getUserVoted(this.state.user);
+    this.toggleVoteModal();
     // window.location.href = '/campaigns';
   }
   render() {
     const { user_voted, campaign_modal, campaign, campaigns, vote_modal } = this.state;
+    const endstyle = {
+      backgroundColor: "#696969",
+      color: "#ffffff"
+    }
     return (
       <>
         <Container style={{ maxWidth: '720px' }}>
@@ -153,6 +166,8 @@ class Campaign extends React.Component {
               <Button size="sm" onClick={() => this.orderBy(2)}>Most Voted</Button>
               <Button size="sm" onClick={() => this.orderBy(3)}>Start Time</Button>
               <Button size="sm" onClick={() => this.orderBy(4)}>End Time</Button>
+              <Button size="sm" onClick={() => this.orderBy(5)}>Started</Button>
+              <Button size="sm" onClick={() => this.orderBy(6)}>Ended</Button>
             </Col>
           </Row>
           {
@@ -163,7 +178,7 @@ class Campaign extends React.Component {
                     campaigns.map((value, index) => {
                       return (
                         <Card key={value._id} style={{ margin: "15px 0" }}>
-                          <CardHeader>
+                          <CardHeader style={new Date(value.end).getTime() < new Date().getTime() ? endstyle : {}}>
                             <Row>
                               <Col>
                                 Campaign : {value.title}
@@ -172,7 +187,16 @@ class Campaign extends React.Component {
                                 (user_voted.findIndex(x => x.campaign === value._id) > -1) ?
                                   <Col className="text-right">Voted</Col>
                                   :
-                                  <Col className="text-right"><Button size="sm" onClick={() => this.voteModal(index)}>Vote</Button></Col>
+                                  utils.checkstatus(value) === 0 ?
+                                    <Col className="text-right">Not yet started</Col>
+                                    :
+                                    utils.checkstatus(value) === 1 ?
+                                      <Col className="text-right"><Button size="sm" onClick={() => this.voteModal(index)}>Vote</Button></Col>
+                                      :
+                                      utils.checkstatus(value) === 2 ?
+                                        <Col className="text-right">Ended</Col>
+                                        :
+                                        null
                               }
                             </Row>
                           </CardHeader>
@@ -203,6 +227,22 @@ class Campaign extends React.Component {
                               </ol>
                             </Row>
                           </CardBody>
+                          <CardFooter>
+                            <Row>
+                              {
+                                utils.checkstatus(value) === 0 ?
+                                  <Col>Not yet started</Col>
+                                  :
+                                  utils.checkstatus(value) === 1 ?
+                                    <Col>Started</Col>
+                                    :
+                                    utils.checkstatus(value) === 2 ?
+                                      <Col>Ended</Col>
+                                      :
+                                      null
+                              }
+                            </Row>
+                          </CardFooter>
                         </Card>
                       )
                     })
@@ -212,7 +252,7 @@ class Campaign extends React.Component {
               :
               <Row>
                 <Col>
-
+                  No campaign
                 </Col>
               </Row>
           }

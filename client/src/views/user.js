@@ -60,8 +60,14 @@ class User extends React.Component {
       user = {};
       user.hkid = this.state.hkid;
       result = await userService.regUser(user);
-      window.localStorage.setItem('user', JSON.stringify(result.user));
-      this.props.history.push('/campaigns');
+      if (!result.error) {
+        window.localStorage.setItem('user', JSON.stringify(result.user));
+        this.props.history.push('/campaigns');
+      }
+      else {
+        alert(result.message);
+        return;
+      }
     }
   }
   editinput = (event) => {
@@ -73,11 +79,29 @@ class User extends React.Component {
   genHKID = () => {
     this.setState({ hkid: hkid.randomHKID() })
   }
+  delToken = () => {
+    window.localStorage.removeItem('user');
+  }
+  refreshToken = async () => {
+    if (this.state.hkid.trim() == "") {
+      alert("Please input HKID who you want to refresh!");
+      return;
+    }
+    let result = await userService.updateUser({ hkid: this.state.hkid, force: true });
+    if (!result.error) {
+      window.localStorage.setItem('user', JSON.stringify(result.user));
+      this.props.history.push('/campaigns');
+    }
+    else {
+      alert(result.message);
+      return;
+    }
+  }
   render() {
     const { user, hkid } = this.state;
     return (
       <>
-        <Container style={{ maxWidth: '720px', padding: '15px 0px' }}>
+        <Container style={{ maxWidth: '720px', padding: '30px 0px' }}>
           {
             user ?
               <Row>
@@ -89,14 +113,28 @@ class User extends React.Component {
               <Row>
                 <Col>
                   <Form>
-                    <Input type="text" placeholder="HKID" value={hkid} onChange={this.editinput} />
-                    <Button color="info" size="sm" style={{ minWidth: 80 }} onClick={() => this.regUser()}>SUBMIT</Button>
-                    {
-                      process.env.REACT_APP_ENV === "development" ?
-                        < Button color="info" size="sm" style={{ minWidth: 80 }} onClick={() => this.genHKID()}>GENHKID</Button>
-                        :
-                        null
-                    }
+                    <Row>
+                      <Col>
+                        <Input type="text" placeholder="HKID" value={hkid} onChange={this.editinput} />
+                      </Col>
+                    </Row>
+                    <Row>
+                      <Col sm="1">
+                        <Button size="sm" style={{ minWidth: 80 }} onClick={() => this.regUser()}>SUBMIT</Button>
+                      </Col>
+                      <Col className="text-right">
+                        {
+                          process.env.REACT_APP_ENV === "development" ?
+                            <div>
+                              <Button size="sm" style={{ minWidth: 80 }} onClick={() => this.genHKID()}>GENHKID</Button>
+                              <Button size="sm" onClick={() => this.delToken()}>DELETE TOKEN</Button>
+                              <Button size="sm" onClick={() => this.refreshToken()}>FORCE REFRESH TOKEN</Button>
+                            </div>
+                            :
+                            null
+                        }
+                      </Col>
+                    </Row>
                   </Form>
                 </Col>
               </Row>

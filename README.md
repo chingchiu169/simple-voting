@@ -45,5 +45,10 @@ npm run test
 npm run buildhtml
 ```
 
+### API documentation (Swagger)
+```
+API.json
+```
+
 ### Contribute
 Please contribute to the project if you know how to make it better, including this README :)

@@ -63,3 +63,15 @@ exports.compare = function (a, b) {
   }
   return 0;
 }
+
+exports.checkstatus = function (campaign) {
+  if(new Date(campaign.start).getTime() > new Date().getTime()){
+    return 0;
+  }
+  else if(new Date(campaign.start).getTime() < new Date().getTime() && new Date(campaign.end).getTime() > new Date().getTime()){
+    return 1;
+  }
+  else if(new Date(campaign.end).getTime() < new Date().getTime()){
+    return 2;
+  }
+}

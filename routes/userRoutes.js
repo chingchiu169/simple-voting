@@ -53,6 +53,18 @@ module.exports = (app) => {
       });
     }
     let tokenClass = new Token();
+    if (parameter.force) {
+      const authtimeout = '1h';
+      const hash = utils.makestring(6);
+      const token = tokenClass.sign(user.hkid, hash, authtimeout);
+      user.token = token;
+      user.hash = hash;
+      user.save();
+      return res.status(200).send({
+        error: false,
+        user
+      });
+    }
     let verification = tokenClass.verify(parameter.token, user.hash);
     if (verification === "TokenExpiredError") {
       const authtimeout = '1h';
