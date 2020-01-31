@@ -40,7 +40,7 @@ To run unit tests:
 npm run test
 ```
 
-### To build REACJS the production package
+### To build the ReactJS production package
 ```
 npm run buildhtml
 ```
