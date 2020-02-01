@@ -155,6 +155,9 @@
             "schema": {
               "type": "object",
               "properties": {
+                "hkid": {
+                  "type": "string"
+                },
                 "token": {
                   "type": "string"
                 }
