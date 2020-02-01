@@ -41,7 +41,7 @@ class User extends React.Component {
     let user = JSON.parse(window.localStorage.getItem('user'));
     // If exist then check
     if (user) {
-      result = await userService.checkUser({ token: user.token });
+      result = await userService.checkUser({ token: user.token, hkid: this.state.hkid });
       // If expired then update
       if (result.error) {
         if (result.message === 'Your token has expired.') {
@@ -52,8 +52,16 @@ class User extends React.Component {
           }
           window.localStorage.setItem('user', JSON.stringify(result.user));
         }
+        else if (result.message === 'HKID and Token do not match.') {
+          alert(result.message);
+          return;
+        }
+        else {
+          alert(result.message);
+          return;
+        }
       }
-      this.props.history.push('/campaigns');
+      this.props.history.push({ pathname: '/campaigns', state: { hkid: this.state.hkid } });
     }
     else {
       // If not exist

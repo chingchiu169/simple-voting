@@ -97,6 +97,12 @@ module.exports = (app) => {
     let parameter = req.body;
     let tokenClass = new Token();
     let data = tokenClass.decode(parameter.token);
+    if (parameter.hkid !== data.hkid) {
+      return res.status(201).send({
+        error: true,
+        message: "HKID and Token do not match."
+      });
+    }
     let user = await User.findOne({ hkid: data.hkid });
     if (!user) {
       return res.status(201).send({

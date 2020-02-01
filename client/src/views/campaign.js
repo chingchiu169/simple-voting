@@ -40,7 +40,7 @@ class Campaign extends React.Component {
   getUser = async () => {
     let user = JSON.parse(window.localStorage.getItem('user'));
     if (user) {
-      let result = await userService.checkUser(user);
+      let result = await userService.checkUser({ token: user.token, hkid: this.props.location.state.hkid });
       if (!result.error) {
         this.setState({ user: user });
         this.getCampaigns();
