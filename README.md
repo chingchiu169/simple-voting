@@ -43,8 +43,7 @@ http://localhost:5000/
 http://localhost:3000/
 ```
 
-### To test
-To run unit tests:
+### To run unit test
 
 ```
 npm run test
