@@ -14,7 +14,7 @@ describe('UserTokenGet', function () {
 
 describe('UserTokenCheck', function () {
   it('should return error=false coz token has not expired', async function () {
-    let result = await axios.patch('http://localhost:5000/api/user', { token: token });
+    let result = await axios.patch('http://localhost:5000/api/user', { hkid: HKID, token: token });
     let user = result.data;
     assert.equal(user.error, false);
   });
