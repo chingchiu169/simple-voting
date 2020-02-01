@@ -13,9 +13,7 @@
 
 ### Demo
 
-```
-https://simple-voting.davidchiu.work/
-```
+[https://simple-voting.davidchiu.work/](https://simple-voting.davidchiu.work/)
 
 ### To run
 * Clone the project:
@@ -36,8 +34,14 @@ npm run setup
 npm run dev
 ```
 
-API run at `http://localhost:5000/`
-ReactJS run at `http://localhost:3000/`
+* API
+```
+http://localhost:5000/
+```
+* Front-end
+```
+http://localhost:3000/
+```
 
 ### To test
 To run unit tests:
@@ -58,7 +62,7 @@ npm run buildhtml
 Documentation.json
 ```
 
-### API documentation (Word)
+### API documentation (Microsoft Word)
 
 ```
 Documentation.docx
