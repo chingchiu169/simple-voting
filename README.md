@@ -13,7 +13,7 @@
 
 ### Demo
 
-[https://simple-voting.davidchiu.work/](https://simple-voting.davidchiu.work/)
+* [https://simple-voting.davidchiu.work/](https://simple-voting.davidchiu.work/)
 
 ### To run
 * Clone the project:
