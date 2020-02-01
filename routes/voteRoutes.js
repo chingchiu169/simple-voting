@@ -17,7 +17,7 @@ module.exports = (app) => {
 		if (Object.keys(parameter).length === 0 && parameter.constructor === Object) {
 			return res.status(200).send({
 				error: true,
-				message: 'Error!'
+				message: 'Parameter Error!'
 			});
 		}
 		let tokenClass = new Token;

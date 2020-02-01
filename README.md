@@ -12,6 +12,7 @@
 * You'll need to have [git](https://git-scm.com/), [node](https://nodejs.org/en/) and [mongodb](https://www.mongodb.com/) installed in your system.
 
 ### Demo
+
 ```
 https://simple-voting.davidchiu.work/
 ```
@@ -46,13 +47,21 @@ npm run test
 ```
 
 ### To build the ReactJS production package
+
 ```
 npm run buildhtml
 ```
 
 ### API documentation (Swagger)
+
 ```
-API.json
+Documentation.json
+```
+
+### API documentation (Word)
+
+```
+Documentation.docx
 ```
 
 ### Contribute
