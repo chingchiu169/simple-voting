@@ -15,6 +15,10 @@ import {
   Label,
   CardHeader,
   CardFooter,
+  Dropdown,
+  DropdownToggle,
+  DropdownMenu,
+  DropdownItem,
 } from "reactstrap";
 import userService from '../services/userService';
 import campaignService from '../services/campaignService';
@@ -32,7 +36,7 @@ Array.prototype.sum = function (prop) {
 class Campaign extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { user: {}, user_voted: [], campaign_modal: false, campaign: { options: [] }, campaigns: [], vote_modal: false };
+    this.state = { user: {}, user_voted: [], campaign_modal: false, campaign: { options: [] }, campaigns: [], vote_modal: false, autorefreshtime: 0, autorefreshdropdown: false };
   }
   componentDidMount = () => {
     this.getUser();
@@ -59,8 +63,36 @@ class Campaign extends React.Component {
     this.setState({ user_voted: result.votes })
   }
   getCampaigns = async () => {
+    let { orderBy } = this.state;
     let campaigns = await campaignService.getAll();
-    this.setState({ campaigns: campaigns.campaigns })
+    if (orderBy) {
+      this.orderBy(orderBy);
+    }
+    else {
+      this.setState({ campaigns: campaigns.campaigns });
+    }
+  }
+  startcount = (timeout) => {
+    let x = setInterval(() => {
+      timeout = (timeout - 1000);
+      this.setState({ refresh: timeout / 1000 });
+      if (timeout === 0) {
+        timeout = this.state.autorefreshtime;
+        this.getCampaigns();
+      }
+      if (this.state.autorefreshtime === 0) {
+        clearInterval(this.state.autorefresh)
+      }
+    }, 1000);
+    this.setState({ autorefresh: x });
+  }
+  toogleAutoRefresh = (time) => {
+    this.setState({ autorefreshtime: time, refresh: time / 1000 });
+    clearInterval(this.state.autorefresh);
+    this.startcount(time);
+  }
+  toggleDropdown = () => {
+    this.setState({ autorefreshdropdown: !this.state.autorefreshdropdown })
   }
   toggleModal = () => {
     this.setState({ campaign_modal: !this.state.campaign_modal })
@@ -81,7 +113,7 @@ class Campaign extends React.Component {
   newCampaign = async () => {
     let { campaign } = this.state;
     if (campaign.options.length < 2) {
-      alert("Options must more than 1");
+      alert("Must more than 1 options");
       return;
     }
     let data = await campaignService.regCampaign(campaign);
@@ -113,7 +145,7 @@ class Campaign extends React.Component {
         break;
       default:
     }
-    this.setState({ campaigns: campaigns });
+    this.setState({ campaigns: campaigns, orderBy: type });
   }
   quitCampign = () => {
     this.props.history.push('/user');
@@ -140,7 +172,7 @@ class Campaign extends React.Component {
     // window.location.href = '/campaigns';
   }
   render() {
-    const { user_voted, campaign_modal, campaign, campaigns, vote_modal } = this.state;
+    const { user_voted, campaign_modal, campaign, campaigns, vote_modal, refresh, autorefreshtime, autorefreshdropdown } = this.state;
     const endstyle = {
       backgroundColor: "#696969",
       color: "#ffffff"
@@ -170,6 +202,29 @@ class Campaign extends React.Component {
               <Button size="sm" onClick={() => this.orderBy(6)}>Ended</Button>
             </Col>
           </Row>
+          <Row>
+            <Col>
+              {
+                autorefreshtime === 0 ?
+                  "Auto refresh stopped"
+                  :
+                  " Auto refresh in " + refresh + "s"
+              }
+            </Col>
+            <Col className="text-right">
+              <Dropdown isOpen={autorefreshdropdown} toggle={this.toggleDropdown} size="sm">
+                <DropdownToggle caret>
+                  Refresh Time
+                </DropdownToggle>
+                <DropdownMenu>
+                  <DropdownItem active onClick={() => { this.toogleAutoRefresh(0) }}>Off</DropdownItem>
+                  <DropdownItem onClick={() => { this.toogleAutoRefresh(10000) }}>10s</DropdownItem>
+                  <DropdownItem onClick={() => { this.toogleAutoRefresh(20000) }}>20s</DropdownItem>
+                  <DropdownItem onClick={() => { this.toogleAutoRefresh(30000) }}>30s</DropdownItem>
+                </DropdownMenu>
+              </Dropdown>
+            </Col>
+          </Row>
           {
             campaigns ?
               <Row>
@@ -178,7 +233,7 @@ class Campaign extends React.Component {
                     campaigns.map((value, index) => {
                       return (
                         <Card key={value._id} style={{ margin: "15px 0" }}>
-                          <CardHeader style={new Date(value.end).getTime() < new Date().getTime() ? endstyle : {}}>
+                          <CardHeader style={utils.checkstatus(value) === 2 ? endstyle : {}}>
                             <Row>
                               <Col>
                                 Campaign : {value.title}

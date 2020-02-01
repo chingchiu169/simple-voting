@@ -50,7 +50,9 @@ class User extends React.Component {
             alert(result.message);
             return;
           }
-          window.localStorage.setItem('user', JSON.stringify(result.user));
+          else{
+            window.localStorage.setItem('user', JSON.stringify(result.user));
+          }
         }
         else if (result.message === 'HKID and Token do not match.') {
           alert(result.message);

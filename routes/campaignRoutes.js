@@ -5,7 +5,7 @@ module.exports = (app) => {
 
 	app.get(`/api/campaign`, async (req, res) => {
 		// Get all campaign
-		let campaigns = await Campaign.find();
+		let campaigns = await Campaign.find().sort([['time', -1]]);
 		return res.status(200).send({
 			error: false,
 			campaigns
