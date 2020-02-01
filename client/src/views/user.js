@@ -70,7 +70,7 @@ class User extends React.Component {
       result = await userService.regUser(user);
       if (!result.error) {
         window.localStorage.setItem('user', JSON.stringify(result.user));
-        this.props.history.push('/campaigns');
+        this.props.history.push({ pathname: '/campaigns', state: { hkid: this.state.hkid } });
       }
       else {
         alert(result.message);
@@ -85,7 +85,7 @@ class User extends React.Component {
     return hkid.isHKID(value);
   }
   genHKID = () => {
-    this.setState({ hkid: hkid.randomHKID() })
+    this.setState({ hkid: hkid.randomHKID() });
   }
   delToken = () => {
     window.localStorage.removeItem('user');
